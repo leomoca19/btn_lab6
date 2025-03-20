@@ -1,0 +1,50 @@
+Protocol Documentation
+
+PDU Types:
+- F (FILENAME PDU): Client requests a file from the server.
+- D (DATA PDU): Server sends a chunk of the file data.
+- L (LAST PDU): Server signals the end of the file transfer.
+- E (ERROR PDU): Server reports an error (e.g., file not found).
+
+PDU Format:
+- <Type> <Data>
+
+PDU Details:
+- FILENAME PDU:
+    - Format: F <filename>
+    - Example: F sendFile.txt
+- DATA PDU:
+    - Format: D <file_chunk_data>
+    - Example: D This is a chunk of data.
+- LAST PDU:
+    - Format: L <last_file_chunk_data>
+    - Example: L (empty for last chunk)
+- ERROR PDU:
+    - Format: E <error_message>
+    - Example: E File not found
+
+Server Process:
+1. UDP Server:
+    - Listens for client requests.
+    - Receives FILENAME PDU from client.
+    - Checks if file exists.
+    - If file exists, sends DATA PDUs in chunks of 100 bytes or less.
+    - Sends LAST PDU when transfer is complete.
+    - Sends ERROR PDU if file not found.
+2. TCP Server:
+    - Listens for client connections.
+    - Accepts connection.
+    - Receives FILENAME PDU from client.
+    - Sends DATA PDUs in chunks of 100 bytes or less.
+    - Sends LAST PDU when transfer is complete.
+    - Sends ERROR PDU if file not found.
+
+Client Process:
+1. Client Steps:
+    - Sends FILENAME PDU to server.
+    - Listens for DATA PDUs.
+    - Writes received data to a local file.
+    - Stops when LAST PDU is received.
+    - Handles ERROR PDUs.
+2. File Saving:
+    - Reconstructs file from received chunks.

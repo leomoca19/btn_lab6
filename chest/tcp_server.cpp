@@ -47,9 +47,6 @@ int main(){
 	// Connection acknowledgement
 	cout << recv_msg(&client) << endl;
 
-
-
-
 	send_msg(&client, "Bye from server");
 	cout << "Server is closing" << endl;
 	closesocket(client);
